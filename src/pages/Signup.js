@@ -24,8 +24,6 @@ const Signup = () => {
   return (
     // <div className="flex h-screen bg-cover bg-center p-12 md:flex-row flex-col bg-image">
     <div className="flex flex-col md:flex-row h-auto md:h-screen bg-cover bg-center p-6 md:p-12 bg-image">
-      {/* Left Section - Sign In */}
-
       <div className="flex flex-col items-center md:w-1/2 rounded-[24px] px-8 text-white bg-halfsection">
         <div className="w-full flex items-start justify-center md:justify-start pt-8 pb-5 md:pb-0">
           <img src={lightlogo} />
