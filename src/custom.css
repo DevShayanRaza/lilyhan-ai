@@ -1,0 +1,16 @@
+.bg-image {
+  background-image: url("./assets/bg.svg");
+  background-size: cover;
+  /* height:auto; */
+
+}
+.bg-halfsection{
+  background-image: url("./assets/bg-blue.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+}
+.input{
+  background-color: '#FFFFFF';
+}
