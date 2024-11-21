@@ -48,7 +48,7 @@ const Signup = () => {
       </div>
       <div className="flex flex-col  items-center md:w-[50%] w-[100%] rounded-[24px] bg-[#FFFFFF] px-8">
         <div className="h-full flex flex-col justify-center items-center md:w-[55%]">
-          <h1 className="text-3xl font-bold mb-4">Sign in</h1>
+          <h1 className="text-3xl font-bold mb-4">Sign up</h1>
           <p className="text-[#969696] text-[14px] font-normal	font mb-8 text-center">
             Sign up to enjoy the feature of Revolutie
           </p>

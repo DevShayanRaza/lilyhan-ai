@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import logo from "../assets/logo.svg";
 import googleBtn from "../assets/google.svg";
 import { useNavigate } from "react-router-dom";
-
+import eyeclose from "../assets/eyeclose.svg";
+import eyeopen from "../assets/eyeopen.svg";
 import "../custom.css";
 import InputField from "../components/InputField";
-import { Router } from "react-router-dom";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState);
+  };
   return (
     // <div className="flex h-screen bg-cover bg-center p-12 md:flex-row flex-col bg-image">
     <div className="flex flex-col md:flex-row h-auto md:h-screen bg-cover bg-center p-6 md:p-12 bg-image">
@@ -33,7 +37,7 @@ const SignIn = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <div className="my-5">
+            {/* <div className="my-5">
               <InputField
                 label="Password"
                 type="password"
@@ -41,6 +45,39 @@ const SignIn = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 //   placeholder="Enter your email"
               />
+            </div> */}
+
+            <div className="relative my-5">
+              {/* Password Input */}
+              <input
+                type={passwordVisible ? "text" : "password"}
+                id="password_input"
+                className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+              />
+
+              {/* Floating Label */}
+              <label
+                htmlFor="password_input"
+                className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 left-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+              >
+                Password
+              </label>
+
+              {/* Eye Icon */}
+              <button
+                type="button"
+                className="absolute inset-y-0 right-3 flex items-center"
+                onClick={togglePasswordVisibility}
+              >
+                {passwordVisible ? (
+                  // Eye Open Icon
+
+                  <img src={eyeopen} />
+                ) : (
+                  <img src={eyeclose} />
+                )}
+              </button>
             </div>
             {/* </div> */}
             <div className="flex items-center justify-between mb-4">
