@@ -23,7 +23,8 @@ export const engines = [
     status: "Syncing",
     statusType: "Connected Datasources", // Indicates the orange color
     connected: true,
-    datasources: ["SharePoint"],
+    datasources: sharepoint,
+    // serviceIcon:
     icon: ocr, // For illustrative purposes, replace with your icon reference
   },
   {
@@ -31,7 +32,7 @@ export const engines = [
     status: "Syncing",
     statusType: "Connected",
     connected: true,
-    datasources: ["Google Drive"],
+    datasources: googledrive,
     icon: document, // Replace with actual icon reference
   },
   {
@@ -39,7 +40,7 @@ export const engines = [
     status: "Connected",
     statusType: "Connected", // Indicates the green color
     connected: true,
-    datasources: [],
+    datasources: s3,
     icon: aimage, // Replace with actual icon reference
   },
   {
@@ -47,7 +48,7 @@ export const engines = [
     status: "Not Set",
     statusType: "Not Connected", // Indicates the gray/black color
     connected: false,
-    datasources: [],
+    datasources: "",
     icon: web, // Replace with actual icon reference
   },
   {
@@ -55,7 +56,7 @@ export const engines = [
     status: "Connected",
     statusType: "Connected", // Indicates the
     connected: true,
-    datasources: ["Microsoft Azure Blob Storage"],
+    datasources: microsoftazure,
     icon: excel, // Replace with actual icon reference
   },
   {
@@ -63,7 +64,7 @@ export const engines = [
     status: "Connected",
     statusType: "Connected Database",
     connected: true,
-    datasources: ["SQL Server"],
+    datasources: sql,
     icon: database, // Replace with actual icon reference
   },
 ];

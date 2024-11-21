@@ -99,8 +99,8 @@ const SignIn = () => {
             </div>
             <button
               type="submit"
-              className="w-full text-white py-2 bg-gradient-to-r from-[#0051A8] to-[#007BFF] rounded-[10px] text-[14px] font-[600]"
-              //   onClick={()=>Router.pu}
+              className="w-full text-white py-2 bg-gradient-to-r from-[#0051A8] to-[#007BFF]  hover:to-[#0051A8] hover:from-[#007BFF]  transition ease-in-out duration-500 delay-150 rounded-[10px] text-[18px] font-[600]"
+              onClick={() => navigate("/home")}
             >
               Sign in
             </button>
@@ -112,7 +112,7 @@ const SignIn = () => {
           </div>
 
           <div className="text-center w-full">
-            <button className="flex items-center justify-center w-full max-w-md bg-white py-2 rounded-[10px] border-[#E6E8E7] border-[1px] text-[#232323] md:text-[18px] font-[600]">
+            <button className="flex items-center justify-center w-full max-w-md bg-white hover:bg-gray-200 py-2 rounded-[10px] border-[#E6E8E7] border-[1px] text-[#232323] md:text-[18px] font-[600]">
               Sign in with Google
               <img src={googleBtn} className="ml-2" />
             </button>
@@ -120,12 +120,12 @@ const SignIn = () => {
 
           <p className="text-[#6C6C6C] font-[400] md:text-[18px] mt-4">
             Need an account?{" "}
-            <a
-              href="#"
-              className="text-[#216BBD] underline font-[600] md:text-[18px]"
+            <span
+              onClick={() => navigate("Sign-up")}
+              className="text-[#216BBD] underline font-[600] md:text-[18px] cursor-pointer"
             >
               Create one
-            </a>
+            </span>
           </p>
         </div>
       </div>
@@ -140,7 +140,7 @@ const SignIn = () => {
             Sign Up And Discover A Great Amount Of New Opportunities!
           </p>
           <button
-            className="bg-white text-[#0170E8] font-[600] md:text-[18px] text-[14px] mb-2 px-6 py-2 rounded-lg w-full"
+            className="bg-white text-[#0170E8] font-[600] md:text-[18px] text-[14px] mb-2 px-6 py-2 rounded-lg w-full hover:bg-gray-200"
             onClick={() => navigate("/sign-up")}
           >
             Sign up

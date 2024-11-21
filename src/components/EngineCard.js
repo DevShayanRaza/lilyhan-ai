@@ -45,17 +45,21 @@ const EngineCard = ({ title, status, datasources, icon, statusType }) => {
         </div>
       </div>
 
-      <div className="mt-2 bg-[#EDEDED] flex p-2 rounded-[10px]">
+      <div className="my-4 bg-[#EDEDED] flex p-2 rounded-[10px]">
         <img src={connected} />
         <p className="text-sm text-gray-500 px-2">{statusType}</p>
       </div>
 
-      {datasources.map((service) => (
-        <span key={service} className="block text-blue-500 text-sm mt-1">
-          {service}
-        </span>
-      ))}
-      <button className="w-full mt-4 text-blue-600 border border-blue-600 py-1 rounded">
+      {/* {datasources.map((service) => ( */}
+
+      <img src={datasources} className="py-3" />
+      {/* ))} */}
+
+      <button
+        className={`w-full mt-4 text-blue-600 border border-blue-600 py-1 rounded-[10px] ${
+          datasources ? "mt-22" : "mt-0"
+        }`}
+      >
         View Engine
       </button>
     </div>

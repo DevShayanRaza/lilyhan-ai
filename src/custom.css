@@ -2,15 +2,18 @@
   background-image: url("./assets/bg.svg");
   background-size: cover;
   /* height:auto; */
-
 }
-.bg-halfsection{
+.bg-halfsection {
   background-image: url("./assets/bg-blue.svg");
   background-repeat: no-repeat;
   background-size: cover;
-
-
 }
-.input{
-  background-color: '#FFFFFF';
+.input {
+  background-color: "#FFFFFF";
+}
+
+::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+  color: transparent;
 }

@@ -9,10 +9,13 @@ import { useNavigate } from "react-router-dom";
 
 import "../custom.css";
 import InputField from "../components/InputField";
-import { Router } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -20,6 +23,17 @@ const Signup = () => {
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState);
+  };
+
+  const CustomDateInput = ({ value, onClick }) => {
+    return (
+      <div
+        className="block pl-10 pb-2.5 pt-4 w-[300px] h-10 text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#0056B3] peer cursor-pointer"
+        onClick={onClick}
+      >
+        {value || " "}
+      </div>
+    );
   };
   return (
     // <div className="flex h-screen bg-cover bg-center p-12 md:flex-row flex-col bg-image">
@@ -38,8 +52,8 @@ const Signup = () => {
               If you already have an account, just sign in. We've missed you!{" "}
             </p>
             <button
-              className="bg-white text-[#0170E8] font-[600] md:text-[18px] text-[14px] mb-2 px-6 py-2 rounded-lg w-full"
-              onClick={() => navigate("/sign-in")}
+              className="bg-white text-[#0170E8] font-[600] md:text-[18px] text-[14px] mb-2 px-6 py-2 rounded-lg w-full hover:bg-gray-200"
+              onClick={() => navigate("/")}
             >
               Sign in
             </button>
@@ -60,21 +74,53 @@ const Signup = () => {
               onChange={(e) => setName(e.target.value)}
             />
 
-            <div class="relative my-5">
-              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <img src={calendar} />
+            {/* <div className="relative my-5">
+  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+    <img src={calendar} alt="calendar icon" />
+  </div>
+
+  <input
+    type="date"
+    id="date_input"
+    className="block pl-10 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#0056B3] peer"
+    placeholder=" "
+  />
+
+  <label
+    htmlFor="date_input"
+    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 left-10 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-[#0056B3] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+  >
+    Date of Birth
+  </label>
+</div> */}
+
+            <div className="relative my-5 w-full max-w-md mx-auto">
+              {/* Custom Calendar Icon */}
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <img src={calendar} alt="calendar icon" />
               </div>
 
-              <input
-                type="text"
-                id="floating_outlined"
-                class="block pl-10 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#0056B3] peer"
-                placeholder=" "
+              {/* React Date Picker */}
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="yyyy-MM-dd"
+                className={`block z-999 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-[#0056B3] ${
+                  selectedDate ? "pt-4 pl-10 pb-2.5" : "pl-10 py-3"
+                }`}
+                wrapperClassName="w-full"
+                style={{ width: "100%" }}
+                // placeholderText="Date of Birth"
               />
 
+              {/* Floating Label */}
               <label
-                for="floating_outlined"
-                class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 left-10 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-[#0056B3] peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                htmlFor="date_picker"
+                className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform origin-[0] left-10 z-10 bg-white dark:bg-gray-900 px-2 ${
+                  selectedDate
+                    ? "scale-75 -translate-y-4 top-2"
+                    : "scale-10 top-3"
+                }`}
               >
                 Date of Birth
               </label>
@@ -99,7 +145,7 @@ const Signup = () => {
               {/* Floating Label */}
               <label
                 htmlFor="password_input"
-                className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 left-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 left-2 z-1 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
               >
                 Password
               </label>
@@ -122,7 +168,7 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="w-full text-white py-2 bg-gradient-to-r from-[#0051A8] to-[#007BFF] rounded-[10px] text-[14px] font-[600]"
+              className="w-full text-white py-2 bg-gradient-to-r from-[#0051A8]  to-[#007BFF] rounded-[10px] text-[18px] font-[600]  hover:to-[#0051A8] hover:from-[#007BFF]  transition ease-in-out duration-500 delay-150"
             >
               Sign up
             </button>
@@ -134,7 +180,7 @@ const Signup = () => {
           </div>
 
           <div className="text-center w-full">
-            <button className="flex items-center justify-center w-full max-w-md bg-white py-2 rounded-[10px] border-[#E6E8E7] border-[1px] text-[#232323] md:text-[18px] font-[600]">
+            <button className="flex items-center justify-center w-full max-w-md bg-white py-2 rounded-[10px] border-[#E6E8E7] border-[1px] text-[#232323] md:text-[18px] font-[600] hover:bg-gray-200">
               Continue with Google <img src={googleBtn} className="ml-2" />
             </button>
           </div>
@@ -142,7 +188,7 @@ const Signup = () => {
           <p className="text-[#6C6C6C] font-[400] text-[14px] md:text-[18px] mt-4">
             Already have an account?{" "}
             <span
-              onClick={() => navigate("/sign-in")}
+              onClick={() => navigate("/")}
               className="text-[#216BBD] underline font-[600] md:text-[18px] cursor-pointer"
             >
               Sign in
