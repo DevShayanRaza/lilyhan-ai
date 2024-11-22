@@ -2,7 +2,8 @@
 import React from "react";
 import EngineCard from "./EngineCard";
 // import RecentActivities from "./RecentActivities";
-import { engines } from "../utils/helper";
+import { engines } from "../utils/demodata";
+import RecentActivities from "./RecentActivities";
 
 const HomeMainContent = () => {
   //   const engines = [
@@ -15,15 +16,20 @@ const HomeMainContent = () => {
   //   ];
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="p-6 flex w-full">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 w-[100%] gap-x-4">
+        {engines.map((engine, index) => (
+          <EngineCard key={index} {...engine} />
+        ))}
+      </div> */}
+      <div className="flex flex-wrap w-[80%] gap-4">
         {engines.map((engine, index) => (
           <EngineCard key={index} {...engine} />
         ))}
       </div>
-      {/* <div className="mt-6">
+      <div className="mr-6">
         <RecentActivities />
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -1,11 +1,10 @@
-// components/Sidebar.js
 import React, { useState } from "react";
 import lightlogo from "../assets/lightlogo.svg";
 import openclose from "../assets/openclose.svg";
 import unified from "../assets/unified.svg";
 import chevron from "../assets/chevron.svg";
 
-import { admin, engines, otherEngine } from "../utils/helper";
+import { admin, engines, otherEngine } from "../utils/demodata";
 
 const Sidebar = () => {
   const [itemVisible, setItemVisible] = useState(true);
@@ -15,7 +14,6 @@ const Sidebar = () => {
   };
   return (
     <aside className="w-80 bg-[#0056B3] text-white min-h-screen">
-      {/* <div className="p-4 text-2xl font-bold">LILYHAN AI</div> */}
       <div className="p-6 flex justify-between items-center">
         <img src={lightlogo} />
         <img src={openclose} />
@@ -69,7 +67,7 @@ const Sidebar = () => {
                 <p className="font-[600] text-[15px]">{item.title}</p>
 
                 {item.subItems && (
-                  <ul className="ml-7 mt-2 space-y-1 text-blue-200">
+                  <ul className="mt-2 space-y-1 text-blue-200">
                     {item.subItems.map((subItem, subIndex) => (
                       <li
                         key={subIndex}

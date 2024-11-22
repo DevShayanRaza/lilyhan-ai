@@ -16,6 +16,9 @@ import microsoftazure from "../assets/microsoft-azure.svg";
 import sql from "../assets/sql.svg";
 import sharepoint from "../assets/sharepoint.svg";
 import s3 from "../assets/s3.svg";
+import vector from "../assets/vector.svg";
+import documentTwo from "../assets/documentTwo.svg";
+import connectedTwo from "../assets/connectedTwo.svg";
 
 export const engines = [
   {
@@ -138,5 +141,66 @@ export const admin = [
     connected: true,
     datasources: ["SQL Server"],
     icon: system, // Replace with actual icon reference
+  },
+];
+
+export const recentActivities = [
+  {
+    type: "Upload",
+    icon: documentTwo, // Representing the icon, e.g., "upload"
+    title: "Upload document: Device",
+    time: "5 min ago",
+  },
+  {
+    type: "Connected",
+    icon: connectedTwo, // Representing the icon for connected sources
+    title: "Sources Connected: Sales SharePoint, HR SQL, Finance.xls",
+    time: "5 min ago",
+  },
+  {
+    type: "Vectorization",
+    icon: vector, // Representing vectorization in progress
+    title: "Vectorization in progress for 'invoice.pdf'.",
+    time: "36 min ago",
+  },
+  {
+    type: "Upload",
+
+    icon: documentTwo, // Representing the icon, e.g., "upload"
+    title: "Document 'invoice.pdf' uploaded to OCR Engine",
+    time: "5 min ago",
+  },
+  {
+    type: "Connected",
+
+    icon: connectedTwo, // Representing the icon for connected sources
+    title: "Connected to Azure Blob storage",
+    time: "5 min ago",
+  },
+  {
+    type: "Vectorization",
+    icon: vector, // Representing vectorization in progress
+    title: "Vectorization in progress for 'invoice.pdf'.",
+    time: "36 min ago",
+  },
+  {
+    type: "Upload",
+
+    icon: documentTwo, // Representing the icon, e.g., "upload"
+    title: "Document 'invoice.pdf' uploaded to OCR Engine",
+    time: "5 min ago",
+  },
+  {
+    type: "Connected",
+
+    icon: connectedTwo, // Representing the icon for connected sources
+    title: "Connected to Azure Blob storage",
+    time: "5 min ago",
+  },
+  {
+    type: "Vectorization",
+    icon: vector, // Representing vectorization in progress
+    title: "Vectorization in progress for 'invoice.pdf'.",
+    time: "36 min ago",
   },
 ];

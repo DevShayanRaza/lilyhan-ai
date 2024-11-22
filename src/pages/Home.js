@@ -10,7 +10,7 @@ const Home = () => {
       <Sidebar />
 
       {/* Main Section */}
-      <div className="flex-1 mx-8">
+      <div className="flex-1">
         {/* Header */}
         <Header />
         <Welcome />
