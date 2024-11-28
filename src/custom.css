@@ -20,3 +20,41 @@
 .fit {
   width: fit-content;
 }
+
+
+.customsb::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #374151;
+}
+
+.customsb::-webkit-scrollbar {
+  width: 9px; /* Width of the scrollbar */
+  height: 9px; /* Height of the scrollbar (for horizontal scrollbars) */
+}
+
+.customsb::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #0051A8, #007BFF); /* Gradient for the scrollbar thumb */
+  border-radius: 10px; 
+}
+
+.customsb::-webkit-scrollbar-track {
+  background: #E9E9E9; 
+  border-radius: 10px; 
+}
+
+
+.customsb::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #0051A8, #007BFF); 
+  border-radius: 10px; 
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.custom-dotted-border {
+  border: 1px dotted #0056B399; 
+  border-style: dotted;
+  border-color: #0056B399;
+  border-width: 1px;
+  border-spacing: 5px; 
+  border-image: initial; 
+}

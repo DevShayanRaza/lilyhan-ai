@@ -3,6 +3,9 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import Welcome from "../components/Welcome";
 import HomeMainContent from "../components/HomeMainContent";
+import DocumentList from "../components/DocumentList";
+import OcrEngine from "../components/OcrEngine";
+
 const Home = () => {
   return (
     <div className="flex">
@@ -13,10 +16,16 @@ const Home = () => {
       <div className="flex-1">
         {/* Header */}
         <Header />
-        <Welcome />
+    
 
         {/* Content */}
-        <HomeMainContent />
+        <outlet>
+        {/* <Welcome /> */}
+        {/* <HomeMainContent /> */}
+        <DocumentList/>
+        <OcrEngine/>
+        </outlet>
+      
       </div>
     </div>
   );
