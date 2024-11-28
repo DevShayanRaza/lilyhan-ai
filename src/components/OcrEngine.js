@@ -11,12 +11,74 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 function OcrEngine() {
   const fileInputRef = useRef(null);
-  const modalContainerRef = useRef(null); 
+  const modalContainerRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [fileTypes, setFileTypes] = useState([]);
   const [fileStatuses, setFileStatuses] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Save data to local storage
+  const saveToLocalStorage = async () => {
+    const filesWithContent = await Promise.all(
+      files.map(async (file) => {
+        const content = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(file);
+        });
+  
+        return { name: file.name, type: file.type, content };
+      })
+    );
+  
+    const data = {
+      files: filesWithContent,
+      fileStatuses,
+    };
+  
+    localStorage.setItem("ocrData", JSON.stringify(data));
+  };
+  
+
+  // Load data from local storage
+  const loadFromLocalStorage = () => {
+    const data = JSON.parse(localStorage.getItem("ocrData"));
+    if (data) {
+      const loadedFiles = data.files.map(
+        (file) =>
+          new File([dataURLToBlob(file.content)], file.name, { type: file.type })
+      );
+  
+      setFiles(loadedFiles);
+      setFileTypes(data.files.map((file) => file.type));
+      setFileStatuses(data.fileStatuses);
+    }
+  };
+  
+  // Helper Function to Convert Base64 to Blob
+  const dataURLToBlob = (dataURL) => {
+    const parts = dataURL.split(",");
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const binary = atob(parts[1]);
+    const array = [];
+  
+    for (let i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+  
+    return new Blob([new Uint8Array(array)], { type: mime });
+  };
+  
+
+  useEffect(() => {
+    loadFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    saveToLocalStorage();
+  }, [files, fileStatuses]);
 
   const handleBrowseClick = () => {
     fileInputRef.current.click();
@@ -55,10 +117,8 @@ function OcrEngine() {
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectedFile(null);
-  
   };
 
-  // Render PDF Pages
   const renderPDF = (file) => {
     const reader = new FileReader();
 
@@ -66,7 +126,7 @@ function OcrEngine() {
       const pdfData = new Uint8Array(event.target.result);
       const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
-      modalContainerRef.current.innerHTML = ""; 
+      modalContainerRef.current.innerHTML = "";
 
       for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
         const page = await pdf.getPage(pageNumber);
