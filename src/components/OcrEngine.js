@@ -55,6 +55,7 @@ function OcrEngine() {
   const handleCloseModal = () => {
     setIsModalVisible(false);
     setSelectedFile(null);
+  
   };
 
   // Render PDF Pages
@@ -114,7 +115,7 @@ function OcrEngine() {
           <h2 className="font-bold text-[32px]">OCR Engine</h2>
           <p>Lorem ipsum dolor sit amet Maecenas rutru.</p>
         </div>
-        <div>
+        <div    onClick={handleBrowseClick}>
           <UploadFile />
         </div>
       </div>
@@ -170,7 +171,7 @@ function OcrEngine() {
                 <p
                   className={`w-[40%] text-center -ml-5 rounded text-[14px] py-1 ${
                     fileStatuses[index] === "Complete"
-                      ? "bg-[#D0F9EE] text-[#19BA92]"
+                      ? "bg-[#D0F9EE] text-[#19BA92] -ml-0"
                       : "bg-[#0056B3] text-white"
                   }`}
                 >
@@ -192,15 +193,18 @@ function OcrEngine() {
 
       {/* Modal */}
       {isModalVisible && selectedFile && (
-  <div onClick={handleCloseModal} 
-    className={`absolute top-0 left-0 w-full  bg-white customsb flex items-center justify-center z-50 ${
-      selectedFile.type === "application/pdf" ? " bg-gray-200" : " bg-white"
+  <div
+    onClick={handleCloseModal}
+    className={`absolute top-0 left-0 w-full bg-white customsb flex items-center justify-center z-50 ${
+      selectedFile.type === "application/pdf" ? "bg-gray-200" : "bg-white"
     }`}
   >
+    {/* Child Container */}
     <div
+      // Prevent click event from bubbling up
       className={`overflow-auto ${
-        selectedFile.type === "application/pdf" ? "w-[100%] h-[100%] " : "w-[100%] h-[100%]"
-      } bg-white `}
+        selectedFile.type === "application/pdf" ? "w-[100%] h-[100%]" : "w-[100%] h-[100%]"
+      } bg-white`}
     >
       {/* Close Button */}
       {/* <button
@@ -222,11 +226,10 @@ function OcrEngine() {
           <p>Lorem ipsum dolor sit amet Maecenas rutru.</p>
         </div>
         {/* Buttons Div */}
-        <div className="flex gap-5">
-          <div >
+        <div  onClick={(e) => e.stopPropagation()} className="flex gap-5">
+          <div>
             <ViewDetailsGradient />
           </div>
-
           <div className="flex justify-center items-center bg-[#EDEDED] w-[176px] h-[43px] rounded-[10px] cursor-pointer">
             <p className="font-bold">Download</p>
           </div>
@@ -234,42 +237,48 @@ function OcrEngine() {
         </div>
       </div>
 
-<div className="w-[95%] mx-auto">
-      {/* Content Area */}
-      <div className="flex gap-7 mb-5">
-        {/* Preview Div */}
-        <div
-          ref={modalContainerRef}
-          className={` ${
-            selectedFile.type === "application/pdf" ? "w-[50%] h-[750px]  customsb" : "w-[50%] h-[750px]"
-          } flex`}
-        >
-          {selectedFile.type.startsWith("image/") ? (
-            <img
-              src={URL.createObjectURL(selectedFile)}
-              alt={selectedFile.name}
-              className="w-[100%] max-h-full rounded shadow"
-            />
-          ) : selectedFile.type === "application/pdf" ? (
-            <div className="text-center w-[50%] max-h-full rounded shadow">
-              Rendering PDF...
+      <div className="w-[95%] mx-auto">
+        {/* Content Area */}
+        <div className="flex gap-7 mb-5">
+          {/* Preview Div */}
+          <div
+            ref={modalContainerRef}
+            className={`rounded flex justify-center ${
+              selectedFile.type === "application/pdf" ? "w-[43%] h-[750px] customsb" : "w-[43%] h-[750px]"
+            }`}
+          >
+            {selectedFile.type.startsWith("image/") ? (
+              <img
+                src={URL.createObjectURL(selectedFile)}
+                alt={selectedFile.name}
+                className="w-[100%] max-h-full rounded shadow"
+              />
+            ) : selectedFile.type === "application/pdf" ? (
+              <div className="text-center w-[43%] max-h-full rounded shadow">
+                Rendering PDF...
+              </div>
+            ) : (
+              <p className="text-gray-700">
+                Preview not available for this file type.
+              </p>
+            )}
+          </div>
+
+          {/* Content Div */}
+          <div
+            className={`${
+              selectedFile.type === "application/pdf" ? "w-[55%] h-[750px] customsb" : "w-[55%] h-[750px] customsb"
+            } bg-[#EDEDED] rounded-[10px]`}
+          >
+            {/* Heading */}
+            <div className="flex justify-start p-4">
+              <p className="text-[32px] font-[700]">Title</p>
             </div>
-          ) : (
-            <p className="text-gray-700">
-              Preview not available for this file type.
-            </p>
-          )}
+            {/* Data Div */}
+            <div className="w-[95%] h-[85%] mx-auto overflow-y-scroll customsb p-2"></div>
+          </div>
         </div>
-
-        {/* Content Div */}
-        <div
-          className={`${
-            selectedFile.type === "application/pdf" ? "w-[50%] h-[750px] customsb" : "w-[50%] h-[750px] customsb" 
-          } flex bg-[#EDEDED] rounded-[10px]`}
-        ></div>
-</div>
-
-      </div> 
+      </div>
     </div>
   </div>
 )}
