@@ -59,7 +59,7 @@ const Sidebar = () => {
         } flex`}
       >
         <img src={unified} className="px-2 mx-4" alt="unified" />
-        <p className="font-[600] sm:truncate text-[14px] 2xl:font-bold  2xl:text-[20px]">Unified Engine</p>
+        <p className="font-[600] sm:truncate text-[14px] 2xl:font-bold 2xl:text-[25px]">Unified Engine</p>
       </div>
 
       <ul className="space-y-2 mt-4 w-[95%]">
@@ -70,8 +70,8 @@ const Sidebar = () => {
             key={`engine-${index}`}
             className={`p-2 rounded-[14px] flex items-center ml-2 cursor-pointer ${
               selectedItem === `engine-${index}`
-                ? "border-[1px] border-[#80B7F3] bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
-                : "hover:bg-blue-800"
+                ? "border-[1px] ml-5 border-[#80B7F3] bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
+                : "hover:bg-blue-800 "
             }`}
             onClick={() => handleItemClick(`engine-${index}`, engine.url)}
           >
@@ -82,13 +82,13 @@ const Sidebar = () => {
         <div className="h-[1px] justify-center w-[95%] mx-auto flex items-center bg-[#80B7F3]"></div>
 
         {/* Analytics Dashboard */}
-        <li className="font-semibold p-4">Analytics Dashboard</li>
+        {/* <li className="font-semibold p-4">Analytics Dashboard</li> */}
         {otherEngine.map((item, index) => (
           <li
             key={`otherEngine-${index}`}
             className={`p-2 rounded-[14px] flex items-center ml-2 cursor-pointer ${
               selectedItem === `otherEngine-${index}`
-                ? "border-[1px] border-[#80B7F3] bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
+                ? "border-[1px] border-[#80B7F3] ml-5  bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
                 : "hover:bg-blue-800"
             }`}
             onClick={() => handleItemClick(`otherEngine-${index}`, item.url)}
@@ -130,7 +130,7 @@ const Sidebar = () => {
               key={`otherEngine-${index}`}
               className={`p-2 rounded-[14px] flex items-center ml-6 mb-3 cursor-pointer sm:truncate  2xl:text-[14px] ${
                 selectedItem === `admin-${index}`
-                  ? "border-[1px] border-[#80B7F3] bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
+                  ? "border-[1px] border-[#80B7F3] ml-8  bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
                   : "hover:bg-blue-800"
               }`}
               onClick={() => handleItemClick(`admin-${index}`, item.url)}
@@ -141,9 +141,7 @@ const Sidebar = () => {
           ))}
         </div>
       </div>
-
         </div>
-   
 
         {/* More Engines */}
         {moreEngines.map((items, index) => (
@@ -151,7 +149,7 @@ const Sidebar = () => {
             key={`moreEngine-${index}`}
             className={`p-2 rounded-[14px] flex items-center ml-2 cursor-pointer  ${
               selectedItem === `moreEngine-${index}`
-                ? "border-[1px] border-[#80B7F3] bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
+                ? "border-[1px] border-[#80B7F3] ml-5  bg-gradient-to-r from-[#0051A8] to-[#007BFF]"
                 : "hover:bg-blue-800"
             }`}
             onClick={() => handleItemClick(`moreEngine-${index}`, items.url)}

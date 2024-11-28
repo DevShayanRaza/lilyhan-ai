@@ -81,6 +81,12 @@ export const engines = [
 export const otherEngine = [
 
   {
+    title: "Analytics Dashboard",
+    icon: dashboard, 
+    url: "/analytics-dashboard",
+  
+  },
+  {
     title: "Document List",
     icon: document, 
     url: "/document-list",
