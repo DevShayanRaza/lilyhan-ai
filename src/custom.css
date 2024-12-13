@@ -21,7 +21,6 @@
   width: fit-content;
 }
 
-
 .customsb::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
@@ -34,27 +33,38 @@
 }
 
 .customsb::-webkit-scrollbar-thumb {
-  background: linear-gradient(to right, #0051A8, #007BFF); /* Gradient for the scrollbar thumb */
-  border-radius: 10px; 
+  background: linear-gradient(
+    to right,
+    #0051a8,
+    #007bff
+  ); /* Gradient for the scrollbar thumb */
+  border-radius: 10px;
 }
 
 .customsb::-webkit-scrollbar-track {
-  background: #E9E9E9; 
-  border-radius: 10px; 
+  background: #e9e9e9;
+  border-radius: 10px;
 }
 
-
 .customsb::-webkit-scrollbar-thumb {
-  background: linear-gradient(to right, #0051A8, #007BFF); 
-  border-radius: 10px; 
+  background: linear-gradient(to right, #0051a8, #007bff);
+  border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 .custom-dotted-border {
-  border: 1px dotted #0056B399; 
+  border: 1px dotted #0056b399;
   border-style: dotted;
-  border-color: #0056B399;
+  border-color: #0056b399;
   border-width: 1px;
-  border-spacing: 5px; 
-  border-image: initial; 
+  border-spacing: 5px;
+  border-image: initial;
 }
+/* input:focus {
+  border: none;
+  outline: none;
+}
+input:focus-visible {
+  border: none;
+  outline: none;
+} */

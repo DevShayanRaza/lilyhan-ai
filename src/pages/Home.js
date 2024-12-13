@@ -16,16 +16,14 @@ const Home = () => {
       <div className="flex-1">
         {/* Header */}
         <Header />
-    
 
         {/* Content */}
         <outlet>
-        {/* <Welcome /> */}
-        {/* <HomeMainContent /> */}
-        <DocumentList/>
-        <OcrEngine/>
+          {/* <Welcome /> */}
+          {/* <HomeMainContent /> */}
+          <DocumentList />
+          <OcrEngine />
         </outlet>
-      
       </div>
     </div>
   );

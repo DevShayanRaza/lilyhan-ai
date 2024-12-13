@@ -6,8 +6,10 @@ import Layout from "./components/Layout"; // New Layout component
 import Welcome from "./components/Welcome";
 import HomeMainContent from "./components/HomeMainContent";
 import DocumentList from "./components/DocumentList";
-import OcrEngine from "./components/OcrEngine";
+import OcrEngine from "./pages/OcrEngine";
 import Analytics from "./pages/Analytics";
+import Sample from "./pages/OcrEnginecopy";
+import PDFWithHighlights from "./pages/OcrEnginecopy";
 
 const NotFound = () => {
   return (

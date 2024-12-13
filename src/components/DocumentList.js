@@ -1,4 +1,3 @@
-
 // import React, { useState, useEffect } from "react";
 // import * as XLSX from "xlsx"; // For Excel and CSV files
 // import { PDFDocument } from "pdf-lib"; // For PDF files
@@ -161,6 +160,7 @@ import * as XLSX from "xlsx"; // For Excel and CSV files
 import { PDFDocument } from "pdf-lib"; // For PDF files
 import mammoth from "mammoth"; // For Word files
 import UploadFile from "../svg/UploadFile";
+import ChatField from "./ChatField";
 
 function DocumentList() {
   const [documentData, setDocumentData] = useState([]);
@@ -199,7 +199,9 @@ function DocumentList() {
         // Handle CSV files
         const data = await file.text();
         const parsedCSV = XLSX.read(data, { type: "string" });
-        const content = XLSX.utils.sheet_to_json(parsedCSV.Sheets[parsedCSV.SheetNames[0]]);
+        const content = XLSX.utils.sheet_to_json(
+          parsedCSV.Sheets[parsedCSV.SheetNames[0]]
+        );
         if (content.length > 0) {
           newFileData.dataSource = "CSV Engine";
           newFileData.status = "Vectorized";
@@ -217,7 +219,9 @@ function DocumentList() {
         // Handle Word files
         const reader = new FileReader();
         reader.onload = async (e) => {
-          const content = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+          const content = await mammoth.extractRawText({
+            arrayBuffer: e.target.result,
+          });
           if (content.value.trim().length > 0) {
             newFileData.dataSource = "Word Processor";
             newFileData.status = "Vectorized";
@@ -308,6 +312,7 @@ function DocumentList() {
             ))}
           </div>
         </div>
+        {/* <ChatField /> */}
       </div>
     </>
   );
