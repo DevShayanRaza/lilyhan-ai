@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../custom.css";
 import InputField from "./InputField"; // Assuming InputField is in the same directory
+import Loader from "./Loader"; // Import the loader component
 
-function InvoiceFields() {
+function InvoiceFields({ result, loader }) {
+  console.log(result, "my result");
   // Prefilled data array
   const initialFields = [
     { label: "Invoice No", value: "12074", confidence: 99, editable: false },
@@ -58,16 +60,18 @@ function InvoiceFields() {
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({});
   useEffect(() => {
-    const response = apiResponse; // Simulating API call
-    setFields(
-      Object.keys(response).map((key) => ({
-        label: key,
-        value: response[key],
-        editable: true,
-      }))
-    );
-    setFormData(response);
-  }, []);
+    if (result) {
+      const response = result; // Simulating API call
+      setFields(
+        Object.keys(response).map((key) => ({
+          label: key,
+          value: response[key],
+          editable: true,
+        }))
+      );
+      setFormData(response);
+    }
+  }, [result]);
 
   const toggleEditable = (index) => {
     setFields((prevFields) =>
@@ -96,39 +100,43 @@ function InvoiceFields() {
   };
   return (
     <div className="p-4 bg-[#F3F3F3] flex flex-wrap">
-      {fields.map((field, index) => (
-        <div key={index} className="flex flex-col p-4 w-[50%] bg-[#F3F3F3]">
-          {/* Floating Input Field */}
-          <InputField
-            label={field.label}
-            type="text"
-            value={field.value}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            placeholder={`Enter ${field.label}`}
-            disabled={!field.editable} // Disable input field initially
-            labelColor
-          />
+      {!loader ? (
+        fields.map((field, index) => (
+          <div key={index} className="flex flex-col p-4 w-[50%] bg-[#F3F3F3]">
+            {/* Floating Input Field */}
+            <InputField
+              label={field.label}
+              type="text"
+              value={field.value}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              placeholder={`Enter ${field.label}`}
+              disabled={!field.editable} // Disable input field initially
+              labelColor
+            />
 
-          {/* Confidence Display and Action Button */}
-          <div className="mt-2 flex items-center justify-between">
-            <span
-              className={`text-sm font-medium ${
-                field.confidence > 70 ? "text-green-500" : "text-red-500"
-              }`}
-            >
-              Confidence: {field.confidence}%
-            </span>
-            {field.confidence < 70 && (
-              <button
-                className="text-blue-500 font-medium text-sm underline text-[16px]"
-                onClick={() => toggleEditable(index)} // Toggle edit mode
+            {/* Confidence Display and Action Button */}
+            <div className="mt-2 flex items-center justify-between">
+              <span
+                className={`text-sm font-medium ${
+                  field.confidence > 70 ? "text-green-500" : "text-red-500"
+                }`}
               >
-                {field.editable ? "Undo" : "Review Needed"}
-              </button>
-            )}
+                Confidence: {field.confidence}%
+              </span>
+              {field.confidence < 70 && (
+                <button
+                  className="text-blue-500 font-medium text-sm underline text-[16px]"
+                  onClick={() => toggleEditable(index)} // Toggle edit mode
+                >
+                  {field.editable ? "Undo" : "Review Needed"}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }

@@ -1,24 +1,17 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.js";
 import DragNDrop from "../svg/DragNDrop";
 import UploadFile from "../svg/UploadFile";
 import ViewDetails from "../svg/ViewDetails";
-import ViewDetailsGradient from "../svg/ViewDetailsGradient";
-import Edit from "../svg/Edit";
 import ChatField from "../components/ChatField";
 import InvoiceFields from "../components/InvoiceFields";
 import { useResizeObserver } from "@wojtekmaj/react-hooks";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-// import pdf from "./1.pdf";
-// import pdff from "../assets/Race.pdf";
 import "../Sample.css";
 import axios from "axios";
-
-// pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+import { PDFDocument } from "pdf-lib";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -34,28 +27,48 @@ const resizeObserverOptions = {};
 const maxWidth = 800;
 function OcrEngine() {
   const fileInputRef = useRef(null);
-  const [fileUrl] = useState("./1.pdf"); // Path to your PDF
   const pdfPath = `${process.env.PUBLIC_URL}/Race.pdf`; // PDF path in public folder
-  console.log(pdfPath, "pdfPath");
+  // console.log(pdfPath, "pdfPath");
 
   const modalContainerRef = useRef(null);
   const [files, setFiles] = useState([]);
+  const [loader, setLoader] = useState(true);
   const [fileTypes, setFileTypes] = useState([]);
   const [fileStatuses, setFileStatuses] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [file, setFile] = useState("./1_page.pdf");
   const [numPages, setNumPages] = useState();
   const [containerRef, setContainerRef] = useState(null);
   const [containerWidth, setContainerWidth] = useState();
   const [fields, setFields] = useState([]);
+  const [responeData, setResponseData] = useState();
+
   const [response, setResponse] = useState(null);
+  const pageRef = useRef(null); // Reference to the PDF page canvas
+  const [pageRefVisible, setPageRefVisible] = useState(false); // For scaling support
+
+  // console.log(pageRef, "pageRef");
+  const [scale, setScale] = useState(1.0); // For scaling support
+  useEffect(() => {
+    if (!pageRefVisible) {
+      return;
+    }
+    // console.log(pageRef.current, "my pageref");
+  }, [pageRefVisible]);
+
+  useEffect(() => {
+    loadFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    saveToLocalStorage();
+  }, [files, fileStatuses]);
 
   const onResize = useCallback((entries) => {
     const [entry] = entries;
-    console.log(entry.contentRect.width, "entry.contentRect.width");
+    // console.log(entry.contentRect.width, "entry.contentRect.width");
     if (entry) {
       setContainerWidth(entry.contentRect.width);
     }
@@ -81,10 +94,25 @@ function OcrEngine() {
   const handleNextPage = (numPages) =>
     setCurrentPage((prev) => Math.min(prev + 1, numPages));
 
-  console.log(selectedFile, "selectedFile");
+  // console.log(selectedFile, "selectedFile");
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+  const handlePageRenderSuccess = () => {
+    if (pageRef.current) {
+      console.log(pageRef.current.offsetWidth, "only page ref");
+
+      const canvas = pageRef.current.querySelector("canvas");
+      console.log(canvas, "canvascanvascanvas");
+      if (canvas) {
+        const containerWidth = pageRef.current.offsetWidth; // Container width
+        console.log(containerWidth, "containerWidth");
+        const naturalWidth = canvas.width; // Natural canvas width
+        const newScale = containerWidth / naturalWidth; // Calculate scale
+        setScale(newScale); // Update scale
+      }
+    }
+  };
   // Save data to local storage
   const saveToLocalStorage = async () => {
     const filesWithContent = await Promise.all(
@@ -139,14 +167,6 @@ function OcrEngine() {
     return new Blob([new Uint8Array(array)], { type: mime });
   };
 
-  useEffect(() => {
-    loadFromLocalStorage();
-  }, []);
-
-  useEffect(() => {
-    saveToLocalStorage();
-  }, [files, fileStatuses]);
-
   const handleBrowseClick = () => {
     fileInputRef.current.click();
   };
@@ -160,13 +180,22 @@ function OcrEngine() {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     setFileTypes((prevFileTypes) => [...prevFileTypes, ...newFileTypes]);
     setFileStatuses((prevStatuses) => [...prevStatuses, ...newFileStatuses]);
-    // handleSubmit();
+    // const file = event.target.files[0]; // Get the first selected file
   };
 
-  // const afterUpload = ()=>{
+  // const handleFileChange = async (event) => {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = async () => {
+  //     const pdfDoc = await PDFDocument.load(reader.result);
+  //     const modifiedPdfBytes = await pdfDoc.save();
 
-  // }
-
+  //     const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+  //     setPdfUrl(URL.createObjectURL(blob));
+  //     console.log(pdfUrl, "==============pdfurl=========");
+  //   };
+  //   reader.readAsArrayBuffer(file);
+  // };
   const handleDragOver = (event) => {
     event.preventDefault();
   };
@@ -186,12 +215,27 @@ function OcrEngine() {
   };
 
   const handleViewDetails = (file) => {
+    console.log(file, "handleViewDetails file");
+
     setSelectedFile(file);
     setIsModalVisible(true);
+    // const file = event.target.files[0];
+    // const reader = new FileReader();
+    // reader.onload = async () => {
+    //   const pdfDoc = await PDFDocument.load(reader.result);
+    //   const modifiedPdfBytes = await pdfDoc.save();
+
+    //   const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
+    //   setPdfUrl(URL.createObjectURL(blob));
+    //   console.log(pdfUrl, "==============pdfurl=========");
+    // };
+    // reader.readAsArrayBuffer(file);
+    handleSubmit(file);
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (file) => {
+    console.log(file, "uploaded file------------------");
     // e.preventDefault();
     console.log("here");
     if (!file) {
@@ -200,9 +244,10 @@ function OcrEngine() {
     }
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("pdf_file", file);
 
     try {
+      console.log("in respone api");
       const { data } = await axios.post(
         "http://20.49.52.200:8000/api/v1/extract_pdf",
         formData,
@@ -212,12 +257,15 @@ function OcrEngine() {
           },
         }
       );
-      console.log("data", data);
+      console.log("api hit response data", data);
       setResponse(data);
 
       // Extract fields dynamically from the response
       if (data.length > 0 && data[0].result) {
+        setLoader(false);
         const result = data[0].result;
+        setResponseData(result);
+        console.log(result, "result result result");
         setFields(
           Object.keys(result).map((key) => ({
             label: key,
@@ -227,14 +275,18 @@ function OcrEngine() {
         );
       }
     } catch (error) {
+      setLoader(false);
+
+      // setIsModalVisible(true);
+      console.log(error, "error");
       console.error("Error uploading the file:", error);
       alert("File upload failed. Please try again.");
     }
   };
 
   const handleCloseModal = () => {
-    // setIsModalVisible(false);
-    // setSelectedFile(null);
+    setIsModalVisible(false);
+    setSelectedFile(null);
   };
 
   const renderPDF = (file) => {
@@ -273,18 +325,60 @@ function OcrEngine() {
   //     renderPDF(selectedFile);
   //   }
   // }, [selectedFile]);
+  const data = {
+    highlights: [
+      {
+        field: "NDossier",
+        coordinates: { x: 200, y: 100, width: 200, height: 10 },
+      },
+      {
+        field: "client",
+        coordinates: { x: 50, y: 200, width: 300, height: 50 },
+      },
+    ],
+  };
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setFileStatuses((prevStatuses) => prevStatuses.map(() => "Complete"));
-  //   }, 5000);
+  const renderHighlights = () => {
+    console.log("here=======");
+    // console.log(pageRef, "pageRef");
+    if (!pageRef.current) return null;
+    // console.log(pageRef, "pageRefpageRef");
+    const pageCanvas = pageRef.current;
+    // console.log(pageCanvas, "pageCanvas");
+    const { offsetHeight, offsetWidth } = pageCanvas;
+    console.log(pageCanvas, "pageCanvaspageCanvas");
+    const pdfScale = offsetWidth / pageCanvas.naturalWidth || 1;
+    console.log(pdfScale, "pdfScalepdfScalepdfScale");
 
-  //   return () => clearTimeout(timer);
-  // }, [files]);
+    return data.highlights.map((highlight, index) => {
+      const { x, y, width, height } = highlight.coordinates;
+      return (
+        <div
+          key={index}
+          style={{
+            position: "absolute",
+            top: y * pdfScale, // Adjust for scaling
+            left: x * pdfScale,
+            width: width * pdfScale,
+            height: height * pdfScale,
+            backgroundColor: "rgba(255, 255, 0, 0.5)", // Yellow highlight
+            pointerEvents: "none",
+          }}
+        ></div>
+      );
+    });
+  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFileStatuses((prevStatuses) => prevStatuses.map(() => "Complete"));
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [files]);
 
   return (
     <>
-      <div className="relative  ml-5">
+      <div className="relative  ml-2">
         {" "}
         {/* Added relative class */}
         <div className="ocrengine">
@@ -371,7 +465,7 @@ function OcrEngine() {
         {/* Modal */}
         {isModalVisible && selectedFile && (
           <div
-            onClick={handleCloseModal}
+            // onClick={handleCloseModal}
             className={`absolute top-0 left-0 w-full bg-white customsb flex items-center justify-center z-50 ${
               selectedFile.type === "application/pdf"
                 ? "bg-gray-200"
@@ -387,15 +481,7 @@ function OcrEngine() {
                   : "w-[100%] h-[100%]"
               } bg-white`}
             >
-              {/* Close Button */}
-              {/* <button
-        onClick={handleCloseModal}
-        className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-      >
-        Close
-      </button> */}
-
-              {/* <div className="flex justify-between mb-5">
+              <div className="flex justify-between mb-5">
                 <div className="flex flex-col">
                   <h3
                     className="text-3xl font-bold mb-4"
@@ -409,15 +495,15 @@ function OcrEngine() {
                   onClick={(e) => e.stopPropagation()}
                   className="flex gap-5"
                 >
-                  <div>
-                    <ViewDetailsGradient />
+                  <div
+                    className="flex justify-center items-center bg-[#EDEDED] w-[176px] h-[43px] rounded-[10px] cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <p className="font-bold">Close</p>
                   </div>
-                  <div className="flex justify-center items-center bg-[#EDEDED] w-[176px] h-[43px] rounded-[10px] cursor-pointer">
-                    <p className="font-bold">Download</p>
-                  </div>
-                  <Edit />
+                  {/* <Edit /> */}
                 </div>
-              </div> */}
+              </div>
 
               <div className="w-[95%] mx-auto">
                 <div className="flex gap-7 mb-5">
@@ -425,7 +511,7 @@ function OcrEngine() {
                     ref={modalContainerRef}
                     className={`rounded flex justify-center ${
                       selectedFile.type === "application/pdf"
-                        ? "w-[43%] h-[750px] customsb"
+                        ? "w-[73%] md:w-[50%] h-[750px] customsb md:mr-[40px] mr-[10px]"
                         : "w-[43%] h-[750px]"
                     }`}
                   >
@@ -467,45 +553,60 @@ function OcrEngine() {
                       </Document>
                     </div> */}
 
-                    <div className="Example">
+                    <div
+                      className="Example"
+                      // ref={(el) => {
+                      //   console.log(el);
+                      //   // pageRef.current = el;
+                      //   // setPageRefVisible(!!el);
+                      //   // pageRef.current = el;
+                      // }}
+                    >
                       <div className="Example__container">
                         <div
                           className="Example__container__document"
-                          ref={setContainerRef}
+                          // ref={setContainerRef}
                         >
-                          <Document
-                            file={file}
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            options={options}
+                          <div
+                            style={{
+                              position: "relative",
+                              display: "inline-block",
+                              // width: "100%",
+                            }}
+                            // className="xl:w-[90px]"
+                            // ref={(el) => {
+                            //   console.log(el);
+                            //   pageRef.current = el;
+                            //   setPageRefVisible(!!el);
+                            //   // pageRef.current = el;
+                            // }}
                           >
-                            {Array.from(new Array(numPages), (_el, index) => (
-                              <Page
-                                key={`page_${index + 1}`}
-                                pageNumber={index + 1}
-                                width={
-                                  containerWidth
-                                    ? Math.min(containerWidth, maxWidth)
-                                    : maxWidth
-                                }
-                              />
-                            ))}
-                          </Document>
+                            <Document
+                              file={selectedFile}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                              options={options}
+                            >
+                              {Array.from(new Array(numPages), (_el, index) => (
+                                <Page
+                                  key={`page_${index + 1}`}
+                                  pageNumber={index + 1}
+                                  renderAnnotationLayer={false}
+                                  scale={scale}
+                                  onRenderSuccess={handlePageRenderSuccess}
+                                  width={containerWidth}
+                                />
+                              ))}
+                              {renderHighlights()}
+                            </Document>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* <div className="h-full w-[40%]">
-                      <button onClick={handlePreviousPage}>Previous</button>
-                      <button onClick={handleNextPage}>Next</button>
-                      <Worker
-                        workerUrl={`https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js`}
-                      >
-                        <Viewer
-                          fileUrl={pdfPath}
-                          initialPage={currentPage - 1}
-                        />
-                      </Worker>
-                    </div> */}
+                    {/* using pdf-lib and iframe*/}
+                    {/* {pdfUrl && (
+                      <iframe src={pdfUrl} width="100%" height="500px" />
+                    )} */}
                   </div>
 
                   <div
@@ -515,11 +616,13 @@ function OcrEngine() {
                         : "w-[55%] h-[750px] customsb"
                     } bg-[#F3F3F3] rounded-[10px]`}
                   >
-                    <div className="flex justify-start p-4">
-                      <p className="text-[32px] font-[700]">Title</p>
+                    <div className="flex justify-start p-4 px-10">
+                      <p className="text-[32px] font-[700]">
+                        {selectedFile.name}
+                      </p>
                     </div>
                     <div className="w-[95%] h-[85%] mx-auto overflow-y-scroll customsb p-2 bg-[#F3F3F3]">
-                      <InvoiceFields />
+                      <InvoiceFields result={responeData} loader={loader} />
                     </div>
                   </div>
                 </div>
