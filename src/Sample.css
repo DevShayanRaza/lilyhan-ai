@@ -39,6 +39,7 @@
 .Example__container__document {
   width: 100%;
   max-width: calc(100% - 2em);
+  height: 100%;
   /* margin: 1em 0; */
 }
 

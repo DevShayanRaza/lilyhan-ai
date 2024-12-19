@@ -12,6 +12,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "../Sample.css";
 import axios from "axios";
 import { PDFDocument } from "pdf-lib";
+import { useNavigate } from "react-router-dom";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -26,6 +27,8 @@ const resizeObserverOptions = {};
 
 const maxWidth = 800;
 function OcrEngine() {
+  const navigate = useNavigate();
+
   const fileInputRef = useRef(null);
   const pdfPath = `${process.env.PUBLIC_URL}/Race.pdf`; // PDF path in public folder
   // console.log(pdfPath, "pdfPath");
@@ -216,9 +219,10 @@ function OcrEngine() {
 
   const handleViewDetails = (file) => {
     console.log(file, "handleViewDetails file");
+    navigate("/ocr-engine-detail", { state: { file } });
 
-    setSelectedFile(file);
-    setIsModalVisible(true);
+    // setSelectedFile(file);
+    // setIsModalVisible(true);
     // const file = event.target.files[0];
     // const reader = new FileReader();
     // reader.onload = async () => {
@@ -230,7 +234,7 @@ function OcrEngine() {
     //   console.log(pdfUrl, "==============pdfurl=========");
     // };
     // reader.readAsArrayBuffer(file);
-    handleSubmit(file);
+    // handleSubmit(file);
   };
 
   // Handle form submission

@@ -10,6 +10,7 @@ import OcrEngine from "./pages/OcrEngine";
 import Analytics from "./pages/Analytics";
 import Sample from "./pages/OcrEnginecopy";
 import PDFWithHighlights from "./pages/OcrEnginecopy";
+import OcrEngineDetail from "./pages/OcrEngineDetail";
 
 const NotFound = () => {
   return (
@@ -31,6 +32,8 @@ const App = () => {
           <Route path="/analytics" element={<Analytics />} />
 
           <Route path="/ocr-engine" element={<OcrEngine />} />
+          <Route path="/ocr-engine-detail" element={<OcrEngineDetail />} />
+
           <Route path="/document-list" element={<DocumentList />} />
           <Route path="*" element={<NotFound />} />
         </Route>
