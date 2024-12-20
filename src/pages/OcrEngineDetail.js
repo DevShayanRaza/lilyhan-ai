@@ -251,7 +251,7 @@ function OcrEngineDetail() {
           className={`flex justify-center items-center ${
             selectedFile?.type === "application/pdf"
               ? "w-1/2 h-[750px] customsb mr-[10px]"
-              : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px] overflow-auto"
+              : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px]"
           }`}
         >
           {/* <div className="Example__container__document">
