@@ -15,6 +15,8 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "../Sample.css";
 import axios from "axios";
+import RenderHighlightArea from "../components/RenderingHighlightArea";
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   import.meta.url
@@ -33,6 +35,7 @@ function OcrEngineDetail() {
   console.log(file, "detail file");
 
   const modalContainerRef = useRef(null);
+
   const [files, setFiles] = useState([]);
   const [loader, setLoader] = useState(false);
   const [fileTypes, setFileTypes] = useState([]);
@@ -50,16 +53,47 @@ function OcrEngineDetail() {
   const [response, setResponse] = useState(null);
   const pageRef = useRef(null); // Reference to the PDF page canvas
   const [pageRefVisible, setPageRefVisible] = useState(false); // For scaling support
-
+  const [highlightAreas, setHighlightAreas] = useState([
+    // Example highlight areas
+    {
+      pageIndex: 0,
+      top: 0.1,
+      left: 0.1,
+      height: 0.1,
+      width: 0.1,
+    },
+    {
+      pageIndex: 0,
+      top: 21,
+      left: 21,
+      height: 10,
+      width: 10,
+    },
+    {
+      pageIndex: 1,
+      top: 0.2,
+      left: 0.3,
+      height: 0.1,
+      width: 0.2,
+    },
+  ]);
   // console.log(pageRef, "pageRef");
   const [scale, setScale] = useState(1.0); // For scaling support
 
+  //   useEffect(() => {
+  //     if (!pageRefVisible) {
+  //       return;
+  //     }
+  //     // console.log(pageRef.current, "my pageref");
+  //   }, [pageRefVisible, pageRef]);
+
   useEffect(() => {
-    if (!pageRefVisible) {
-      return;
+    if (pageRef.current) {
+      setPageRefVisible(true);
+    } else {
+      setPageRefVisible(false);
     }
-    // console.log(pageRef.current, "my pageref");
-  }, [pageRefVisible]);
+  }, [pageRef.current]);
 
   const fileSlice = useMemo(() => file.slice(0), [file]);
 
@@ -212,14 +246,15 @@ function OcrEngineDetail() {
       <div className="flex flex-grow gap-4">
         {/* PDF Viewer Section */}
         <div
-          ref={modalContainerRef}
+          //   ref={modalContainerRef}
+
           className={`flex justify-center items-center ${
             selectedFile?.type === "application/pdf"
               ? "w-1/2 h-[750px] customsb mr-[10px]"
-              : "w-2/5 xl:w-[87%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px] overflow-auto"
+              : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px] overflow-auto"
           }`}
         >
-          <div className="Example__container__document">
+          {/* <div className="Example__container__document">
             <Document
               file={file}
               onLoadSuccess={onDocumentLoadSuccess}
@@ -237,18 +272,20 @@ function OcrEngineDetail() {
               ))}
               {renderHighlights()}
             </Document>
+          </div> */}
+          <div className="w-[100%] h-full">
+            <RenderHighlightArea
+              areas={highlightAreas}
+              fileUrl={URL.createObjectURL(file)}
+            />
           </div>
         </div>
 
-        {/* {pdfUrl && (
-                      <iframe src={pdfUrl} width="100%" height="500px" />
-                    )} */}
-        {/* Invoice Fields Section */}
         <div
           className={`xl:w-[65%] 2xl:w-[50%] h-[750px] customsb bg-[#F3F3F3] rounded-[10px]`}
         >
           <div className="flex justify-start p-4 px-10">
-            <p className="text-[32px] font-[700]">{file?.name}</p>
+            <p className="text-[22px] font-[700]">{file?.name}</p>
           </div>
           <div className="w-[95%] h-[80%] mx-auto overflow-y-scroll customsb p-2 bg-[#F3F3F3] rounded-[10px]">
             <InvoiceFields result={responeData} loader={loader} />
@@ -261,3 +298,77 @@ function OcrEngineDetail() {
 }
 
 export default OcrEngineDetail;
+
+// import React, { useEffect, useState } from "react";
+// // import RenderHighlightAreasExample from "./RenderHighlightAreasExample";
+// import RenderHighlightArea from "../components/RenderingHighlightArea";
+// import { useLocation } from "react-router-dom";
+// import "../Sample.css";
+
+// const OcrEngineDetail = () => {
+//   const location = useLocation();
+//   const { file } = location.state || {}; // Add a fallback to prevent errors if state is undefined
+//   const fileUrl = file || "./1_page.pdf"; // Fallback if file is undefined
+
+//   //   const { file } = route.params;
+//   console.log(file, "detail file");
+//   // const [fileUrl, setFileUrl] = useState("./1_page.pdf"); // Replace with your actual PDF file path
+//   const [highlightAreas, setHighlightAreas] = useState([
+//     // Example highlight areas
+//     {
+//       pageIndex: 0,
+//       top: 0.1,
+//       left: 0.1,
+//       height: 0.1,
+//       width: 0.1,
+//     },
+//     {
+//       pageIndex: 0,
+//       top: 21,
+//       left: 21,
+//       height: 10,
+//       width: 10,
+//     },
+//     {
+//       pageIndex: 1,
+//       top: 0.2,
+//       left: 0.3,
+//       height: 0.1,
+//       width: 0.2,
+//     },
+//   ]);
+
+//   // useEffect(() => {
+//   //   if (file) {
+//   //     setFileUrl(file);
+//   //   }
+//   // }, []);
+//   return (
+//     <div className="w-full h-full flex flex-col">
+//       {" "}
+//       <div className="header">
+//         <h3
+//           className="text-3xl font-bold mb-4"
+//           style={{ fontFamily: "Roboto, sans-serif" }}
+//         >
+//           Document Processing
+//         </h3>
+//         <p>Lorem ipsum dolor sit amet Maecenas rutru.</p>
+//       </div>
+//       <div className="w-[50%] h-[100%]">
+//         {/* PDF Viewer Section */}
+//         <RenderHighlightArea
+//           areas={highlightAreas}
+//           fileUrl={URL.createObjectURL(file)}
+//         />
+
+//         {/* Invoice Fields Section */}
+//         {/* <div className="invoice-container w-1/2 h-[750px] bg-[#F3F3F3] rounded-[10px] overflow-y-scroll customsb p-4">
+//           <p>Invoice fields will go here...</p>
+//         </div> */}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default OcrEngineDetail;

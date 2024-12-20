@@ -60,3 +60,9 @@
   /* padding: 20px; */
   color: white;
 }
+.highlight-area {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  border-radius: 2px;
+}
