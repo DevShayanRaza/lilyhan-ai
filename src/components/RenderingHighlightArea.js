@@ -5,6 +5,7 @@ import { highlightPlugin, Trigger } from "@react-pdf-viewer/highlight";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
+import "../Sample.css";
 
 const RenderHighlightArea = ({ areas, fileUrl }) => {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -38,7 +39,11 @@ const RenderHighlightArea = ({ areas, fileUrl }) => {
     //   className="pdf-container"
     //   style={{ height: "750px", overflow: "auto" }}
     >
-      <Viewer fileUrl={fileUrl} plugins={[highlightPluginInstance]} />
+      <Viewer
+        fileUrl={fileUrl}
+        plugins={[highlightPluginInstance]}
+        className="rpv-core__inner-pages"
+      />
     </div>
   );
 };

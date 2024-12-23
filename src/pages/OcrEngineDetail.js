@@ -16,6 +16,7 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "../Sample.css";
 import axios from "axios";
 import RenderHighlightArea from "../components/RenderingHighlightArea";
+import "../Sample.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
@@ -251,7 +252,7 @@ function OcrEngineDetail() {
           className={`flex justify-center items-center ${
             selectedFile?.type === "application/pdf"
               ? "w-1/2 h-[750px] customsb mr-[10px]"
-              : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px]"
+              : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px] overflow-auto"
           }`}
         >
           {/* <div className="Example__container__document">
