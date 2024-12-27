@@ -518,71 +518,15 @@ function OcrEngine() {
                         : "w-[43%] h-[750px]"
                     }`}
                   >
-                    {/* {selectedFile.type.startsWith("image/") ? (
-                      <img
-                        src={URL.createObjectURL(selectedFile)}
-                        alt={selectedFile.name}
-                        className="w-[100%] max-h-full rounded shadow"
-                      />
-                    ) : selectedFile.type === "application/pdf" ? (
-                      <div className="text-center w-[43%] max-h-full rounded shadow">
-                        Rendering PDF...
-                      </div>
-                    ) : (
-                      <p className="text-gray-700">
-                        Preview not available for this file type.
-                      </p>
-                    )} */}
-                    {/* 
-                    <div className="pdf-div">
-                   
-                      <Document
-                        file={pdf}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                      >
-                        {Array.apply(null, Array(numPages))
-                          .map((x, i) => i + 1)
-                          .map((page) => {
-                            return (
-                              <Page
-                                size="A4"
-                                style={{ height: 50 }}
-                                pageNumber={1}
-                                renderTextLayer={false}
-                                renderAnnotationLayer={false}
-                              />
-                            );
-                          })}
-                      </Document>
-                    </div> */}
-
-                    <div
-                      className="Example"
-                      // ref={(el) => {
-                      //   console.log(el);
-                      //   // pageRef.current = el;
-                      //   // setPageRefVisible(!!el);
-                      //   // pageRef.current = el;
-                      // }}
-                    >
+                    <div className="Example">
                       <div className="Example__container">
-                        <div
-                          className="Example__container__document"
-                          // ref={setContainerRef}
-                        >
+                        <div className="Example__container__document">
                           <div
                             style={{
                               position: "relative",
                               display: "inline-block",
                               // width: "100%",
                             }}
-                            // className="xl:w-[90px]"
-                            // ref={(el) => {
-                            //   console.log(el);
-                            //   pageRef.current = el;
-                            //   setPageRefVisible(!!el);
-                            //   // pageRef.current = el;
-                            // }}
                           >
                             <Document
                               file={selectedFile}
@@ -605,11 +549,6 @@ function OcrEngine() {
                         </div>
                       </div>
                     </div>
-
-                    {/* using pdf-lib and iframe*/}
-                    {/* {pdfUrl && (
-                      <iframe src={pdfUrl} width="100%" height="500px" />
-                    )} */}
                   </div>
 
                   <div
