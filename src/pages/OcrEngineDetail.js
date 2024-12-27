@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useRef,
-  useState,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import ChatField from "../components/ChatField";
@@ -37,23 +31,15 @@ function OcrEngineDetail() {
 
   const modalContainerRef = useRef(null);
 
-  const [files, setFiles] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [fileTypes, setFileTypes] = useState([]);
-  const [fileStatuses, setFileStatuses] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   //   const [file, setFile] = useState("./1_page.pdf");
-  const [numPages, setNumPages] = useState();
   const [containerRef, setContainerRef] = useState(null);
   const [containerWidth, setContainerWidth] = useState();
   const [fields, setFields] = useState([]);
   const [responeData, setResponseData] = useState();
 
-  const [response, setResponse] = useState(null);
   const pageRef = useRef(null); // Reference to the PDF page canvas
-  const [pageRefVisible, setPageRefVisible] = useState(false); // For scaling support
   const [highlightAreas, setHighlightAreas] = useState([
     // Example highlight areas
     {
@@ -78,25 +64,6 @@ function OcrEngineDetail() {
       width: 0.2,
     },
   ]);
-  // console.log(pageRef, "pageRef");
-  const [scale, setScale] = useState(1.0); // For scaling support
-
-  //   useEffect(() => {
-  //     if (!pageRefVisible) {
-  //       return;
-  //     }
-  //     // console.log(pageRef.current, "my pageref");
-  //   }, [pageRefVisible, pageRef]);
-
-  useEffect(() => {
-    if (pageRef.current) {
-      setPageRefVisible(true);
-    } else {
-      setPageRefVisible(false);
-    }
-  }, [pageRef.current]);
-
-  const fileSlice = useMemo(() => file.slice(0), [file]);
 
   useEffect(() => {
     handleSubmit();
@@ -112,29 +79,6 @@ function OcrEngineDetail() {
 
   useResizeObserver(containerRef, resizeObserverOptions, onResize);
 
-  function onDocumentLoadSuccess({ numPages: nextNumPages }) {
-    setNumPages(nextNumPages);
-  }
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
-  const handlePageRenderSuccess = () => {
-    if (pageRef.current) {
-      console.log(pageRef.current.offsetWidth, "only page ref");
-
-      const canvas = pageRef.current.querySelector("canvas");
-      console.log(canvas, "canvascanvascanvas");
-      if (canvas) {
-        const containerWidth = pageRef.current.offsetWidth; // Container width
-        console.log(containerWidth, "containerWidth");
-        const naturalWidth = canvas.width; // Natural canvas width
-        const newScale = containerWidth / naturalWidth; // Calculate scale
-        setScale(newScale); // Update scale
-      }
-    }
-  };
-
   const data = {
     highlights: [
       {
@@ -149,7 +93,6 @@ function OcrEngineDetail() {
   };
 
   const handleSubmit = async () => {
-    console.log(file, "uploaded file------------------");
     setLoader(true);
     // e.preventDefault();
     console.log("here");
@@ -172,19 +115,16 @@ function OcrEngineDetail() {
           },
         }
       );
-      console.log("api hit response data", data);
-      setResponse(data);
+      // console.log("api hit response data", data);
 
       // Extract fields dynamically from the response
-      if (data.length > 0 && data[0].result) {
+      if (data) {
         setLoader(false);
-        const result = data[0].result;
-        setResponseData(result);
-        console.log(result, "result result result");
+        setResponseData(data);
         setFields(
-          Object.keys(result).map((key) => ({
+          Object.keys(data).map((key) => ({
             label: key,
-            value: result[key],
+            value: data[key],
             editable: true,
           }))
         );

@@ -60,7 +60,13 @@ function OcrEngine() {
     }
     // console.log(pageRef.current, "my pageref");
   }, [pageRefVisible]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFileStatuses((prevStatuses) => prevStatuses.map(() => "Complete"));
+    }, 5000);
 
+    return () => clearTimeout(timer);
+  }, [files]);
   useEffect(() => {
     loadFromLocalStorage();
   }, []);
@@ -372,13 +378,6 @@ function OcrEngine() {
       );
     });
   };
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFileStatuses((prevStatuses) => prevStatuses.map(() => "Complete"));
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [files]);
 
   return (
     <>

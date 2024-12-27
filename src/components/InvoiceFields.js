@@ -4,7 +4,7 @@ import InputField from "./InputField"; // Assuming InputField is in the same dir
 import Loader from "./Loader"; // Import the loader component
 
 function InvoiceFields({ result, loader }) {
-  console.log(result, "my result");
+  // console.log(result, "my result");
   // Prefilled data array
   const initialFields = [
     { label: "Invoice No", value: "12074", confidence: 99, editable: false },
