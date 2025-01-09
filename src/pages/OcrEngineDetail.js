@@ -17,10 +17,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const options = {
-  cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
-};
 const resizeObserverOptions = {};
 function OcrEngineDetail() {
   const location = useLocation();
@@ -29,14 +25,8 @@ function OcrEngineDetail() {
   //   const { file } = route.params;
   console.log(file, "detail file");
 
-  const modalContainerRef = useRef(null);
-
   const [loader, setLoader] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  //   const [file, setFile] = useState("./1_page.pdf");
-  const [containerRef, setContainerRef] = useState(null);
-  const [containerWidth, setContainerWidth] = useState();
-  const [fields, setFields] = useState([]);
   const [responeData, setResponseData] = useState();
 
   const pageRef = useRef(null); // Reference to the PDF page canvas
@@ -69,16 +59,6 @@ function OcrEngineDetail() {
     handleSubmit();
   }, []);
 
-  const onResize = useCallback((entries) => {
-    const [entry] = entries;
-    // console.log(entry.contentRect.width, "entry.contentRect.width");
-    if (entry) {
-      setContainerWidth(entry.contentRect.width);
-    }
-  }, []);
-
-  useResizeObserver(containerRef, resizeObserverOptions, onResize);
-
   const data = {
     highlights: [
       {
@@ -107,7 +87,7 @@ function OcrEngineDetail() {
     try {
       console.log("in respone api");
       const { data } = await axios.post(
-        "http://20.49.52.200:8000/api/v1/extract_pdf",
+        "https://20.49.52.200:8000/api/v1/extract_pdf",
         formData,
         {
           headers: {
@@ -115,25 +95,17 @@ function OcrEngineDetail() {
           },
         }
       );
-      // console.log("api hit response data", data);
 
       // Extract fields dynamically from the response
       if (data) {
+        console.log(data, "complete Data");
+
         setLoader(false);
         setResponseData(data);
-        setFields(
-          Object.keys(data).map((key) => ({
-            label: key,
-            value: data[key],
-            editable: true,
-          }))
-        );
       }
     } catch (error) {
       setLoader(false);
 
-      // setIsModalVisible(true);
-      console.log(error, "error");
       console.error("Error uploading the file:", error);
       alert("File upload failed. Please try again.");
     }
@@ -187,33 +159,12 @@ function OcrEngineDetail() {
       <div className="flex flex-grow gap-4">
         {/* PDF Viewer Section */}
         <div
-          //   ref={modalContainerRef}
-
           className={`flex justify-center items-center ${
             selectedFile?.type === "application/pdf"
               ? "w-1/2 h-[750px] customsb mr-[10px]"
               : "w-2/5 xl:w-[65%] 2xl:w-[42%] xl:max-h-[850px] max-h-[full] mx-0 xl:mx-[30px] overflow-auto"
           }`}
         >
-          {/* <div className="Example__container__document">
-            <Document
-              file={file}
-              onLoadSuccess={onDocumentLoadSuccess}
-              options={options}
-            >
-              {Array.from(new Array(numPages), (_el, index) => (
-                <Page
-                  key={`page_${index + 1}`}
-                  pageNumber={index + 1}
-                  renderAnnotationLayer={false}
-                  scale={scale}
-                  onRenderSuccess={handlePageRenderSuccess}
-                  width={containerWidth}
-                />
-              ))}
-              {renderHighlights()}
-            </Document>
-          </div> */}
           <div className="w-[100%] h-full">
             <RenderHighlightArea
               areas={highlightAreas}
@@ -239,77 +190,3 @@ function OcrEngineDetail() {
 }
 
 export default OcrEngineDetail;
-
-// import React, { useEffect, useState } from "react";
-// // import RenderHighlightAreasExample from "./RenderHighlightAreasExample";
-// import RenderHighlightArea from "../components/RenderingHighlightArea";
-// import { useLocation } from "react-router-dom";
-// import "../Sample.css";
-
-// const OcrEngineDetail = () => {
-//   const location = useLocation();
-//   const { file } = location.state || {}; // Add a fallback to prevent errors if state is undefined
-//   const fileUrl = file || "./1_page.pdf"; // Fallback if file is undefined
-
-//   //   const { file } = route.params;
-//   console.log(file, "detail file");
-//   // const [fileUrl, setFileUrl] = useState("./1_page.pdf"); // Replace with your actual PDF file path
-//   const [highlightAreas, setHighlightAreas] = useState([
-//     // Example highlight areas
-//     {
-//       pageIndex: 0,
-//       top: 0.1,
-//       left: 0.1,
-//       height: 0.1,
-//       width: 0.1,
-//     },
-//     {
-//       pageIndex: 0,
-//       top: 21,
-//       left: 21,
-//       height: 10,
-//       width: 10,
-//     },
-//     {
-//       pageIndex: 1,
-//       top: 0.2,
-//       left: 0.3,
-//       height: 0.1,
-//       width: 0.2,
-//     },
-//   ]);
-
-//   // useEffect(() => {
-//   //   if (file) {
-//   //     setFileUrl(file);
-//   //   }
-//   // }, []);
-//   return (
-//     <div className="w-full h-full flex flex-col">
-//       {" "}
-//       <div className="header">
-//         <h3
-//           className="text-3xl font-bold mb-4"
-//           style={{ fontFamily: "Roboto, sans-serif" }}
-//         >
-//           Document Processing
-//         </h3>
-//         <p>Lorem ipsum dolor sit amet Maecenas rutru.</p>
-//       </div>
-//       <div className="w-[50%] h-[100%]">
-//         {/* PDF Viewer Section */}
-//         <RenderHighlightArea
-//           areas={highlightAreas}
-//           fileUrl={URL.createObjectURL(file)}
-//         />
-
-//         {/* Invoice Fields Section */}
-//         {/* <div className="invoice-container w-1/2 h-[750px] bg-[#F3F3F3] rounded-[10px] overflow-y-scroll customsb p-4">
-//           <p>Invoice fields will go here...</p>
-//         </div> */}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default OcrEngineDetail;
