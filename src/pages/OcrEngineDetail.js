@@ -74,7 +74,6 @@ function OcrEngineDetail() {
 
   const handleSubmit = async () => {
     setLoader(true);
-    // e.preventDefault();
     console.log("here");
     if (!file) {
       alert("Please upload a file!");
