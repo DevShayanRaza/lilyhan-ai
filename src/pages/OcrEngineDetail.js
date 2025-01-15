@@ -86,7 +86,7 @@ function OcrEngineDetail() {
     try {
       console.log("in respone api");
       const { data } = await axios.post(
-        "https://20.49.52.200:8000/api/v1/extract_pdf",
+        "http://20.49.52.200:8000/api/v1/extract_pdf",
         formData,
         {
           headers: {
@@ -183,7 +183,7 @@ function OcrEngineDetail() {
           </div>
         </div>
       </div>
-      <ChatField />
+      {/* <ChatField /> */}
     </div>
   );
 }

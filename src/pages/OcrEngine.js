@@ -284,7 +284,7 @@ function OcrEngine() {
             </div>
           </div>
         </div>
-        <ChatField />
+        {/* <ChatField /> */}
       </div>
     </>
   );
